@@ -8,7 +8,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <button>
-          看看global 属性
+          看看global 属性(CRM)
         </button>
 
         <p className={styles.description}>
