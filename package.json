@@ -2,14 +2,13 @@
    "name": "next-demo",
    "private": true,
    "scripts": {
-      "dev": "next dev",
+      "dev": "concurrently \"next dev\" \"babel -w ./src --out-dir dist --extensions .ts,.tsx\"",
       "build": "next build",
       "start": "next start",
       "lint": "next lint",
       "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
-      "typeorm:build":"babel -w ./src --out-dir dist --extensions .ts,.tsx",
-      "migration:run":"typeorm migration:run",
-      "migration:revert":"typeorm migration:revert"
+      "migration:run": "typeorm migration:run",
+      "migration:revert": "typeorm migration:revert"
    },
    "dependencies": {
       "@babel/cli": "^7.16.0",
@@ -34,6 +33,7 @@
       "@types/node": "^8.0.29",
       "@types/react": "^17.0.34",
       "@types/ua-parser-js": "^0.7.36",
+      "concurrently": "^6.4.0",
       "eslint": "7",
       "eslint-config-next": "12.0.2",
       "typescript": "3.3.3333"
