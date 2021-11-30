@@ -25,14 +25,14 @@ var _Comment = require("./Comment");
 
 var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8;
 
-var Post = (_dec = (0, _typeorm.Entity)(), _dec2 = (0, _typeorm.PrimaryGeneratedColumn)('increment'), _dec3 = (0, _typeorm.Column)('varchar'), _dec4 = (0, _typeorm.Column)('text'), _dec5 = (0, _typeorm.Column)('int'), _dec6 = (0, _typeorm.CreateDateColumn)(), _dec7 = (0, _typeorm.UpdateDateColumn)(), _dec8 = (0, _typeorm.ManyToOne)(function () {
+var Post = (_dec = (0, _typeorm.Entity)('posts'), _dec2 = (0, _typeorm.PrimaryGeneratedColumn)('increment'), _dec3 = (0, _typeorm.Column)('varchar'), _dec4 = (0, _typeorm.Column)('text'), _dec5 = (0, _typeorm.Column)('int'), _dec6 = (0, _typeorm.CreateDateColumn)(), _dec7 = (0, _typeorm.UpdateDateColumn)(), _dec8 = (0, _typeorm.ManyToOne)(function () {
   return _User.User;
 }, function (user) {
   return user.Posts;
 }), _dec9 = (0, _typeorm.OneToMany)(function () {
   return _Comment.Comment;
 }, function (Comment) {
-  return Comment.comment;
+  return Comment.post;
 }), _dec(_class = (_class2 = function Post() {
   (0, _classCallCheck2["default"])(this, Post);
   (0, _initializerDefineProperty2["default"])(this, "id", _descriptor, this);

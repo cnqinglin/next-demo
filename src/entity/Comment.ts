@@ -3,14 +3,13 @@ import {
     CreateDateColumn,
     Entity,
     ManyToOne,
-    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn
   } from 'typeorm';
   import {User} from './User';
   import {Post} from './Post';
   
-  @Entity()
+  @Entity('comments')
   export class Comment {
     @PrimaryGeneratedColumn('increment')
     id: number;
@@ -20,8 +19,8 @@ import {
     user: User;
     @ManyToOne(type => Post, post => post.comments)
     post: Post;
-    @CreateDateColumn('time')
+    @CreateDateColumn()
     createdAt: Date;
-    @UpdateDateColumn('time')
+    @UpdateDateColumn()
     updateAt: Date;
   }
