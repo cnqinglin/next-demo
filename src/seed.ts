@@ -1,14 +1,14 @@
 import "reflect-metadata";
 import {createConnection} from "typeorm";
-import { Post } from "./entity/Post";
 
 createConnection().then(async connection => {
-    const Posts = await connection.manager.find(Post)
-  if (Posts.length === 0) {
+  //   const Posts = await connection.manager.find(Post)
+  // if (Posts.length === 0) {
     
-    await connection.manager.save([1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(item => {
-      return new Post({title:`title${item}`,content:`这是我的弟${item}数据库`})
-    }))
+  //   await connection.manager.save([1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(item => {
+  //     return new Post({title:`title${item}`,content:`这是我的弟${item}数据库`})
+  //   }))
+
     // 这是第一种也是常规写法
     // p.id = 123;
     // p.title = "qinglin";
@@ -21,8 +21,9 @@ createConnection().then(async connection => {
     //   new Post('qinglin2', '我的数据库2'),
     //   new Post('qinglin3', '我的数据库3'),
     // ]);
-  } else {
+  
+  // } else {
     
-  }
-  connection.close()
+  // }
+  // connection.close()
 }).catch(error => console.log(error));
