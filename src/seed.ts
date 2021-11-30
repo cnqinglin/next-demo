@@ -1,7 +1,15 @@
 import "reflect-metadata";
 import {createConnection} from "typeorm";
+import { User } from "./entity/User";
 
 createConnection().then(async connection => {
+
+  const { manager } = connection
+  const ui = new User()
+  ui.username = 'qinglin';
+  ui.passwordDigest = 'yueue';
+  await manager.save(ui)
+  console.log('ui.id', ui.id)
   //   const Posts = await connection.manager.find(Post)
   // if (Posts.length === 0) {
     
