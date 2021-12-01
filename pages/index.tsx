@@ -1,64 +1,48 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+// 父目录serverSides是用来写SSR 的
 
-export default function Home() {
-  return (
-    <div className={styles.container}>
+import { getDataBaseConnection } from "lib/getDataBaseConnection";
+import { GetServerSideProps, NextPage, NextPageContext } from "next"
+import { useState,useEffect } from "react";
+import { createConnection } from 'typeorm';
+var parser = require('ua-parser-js');
 
-      <main className={styles.main}>
-        <button>
-          看看global 属性(CRM)
-        </button>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
-    </div>
-  )
+type Props = {
+    browser: {
+        name: string;
+        version: string;
+        major: string;
+    }
 }
+const postsIndex: NextPage<Props> = (props) => {
+    const { browser } = props
+
+    const [width, setWidth] = useState<Number>(0);
+    useEffect(() => {
+        const w = document.documentElement.clientWidth
+        setWidth(w)
+    },[])
+
+
+    return (
+        <div>
+            <h3>你的浏览器名称是：{browser.name}</h3>
+            <h3>你的浏览窗口宽度是：{width}</h3>
+        </div>
+    )
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const connect = await getDataBaseConnection()
+    
+  console.log('connect',connect)
+
+
+    const ua = parser(context.req.headers['user-agent'])
+    return {
+        props : {
+            browser:ua.browser
+        }
+    }
+}
+
+export default postsIndex

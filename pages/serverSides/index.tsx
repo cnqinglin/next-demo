@@ -31,7 +31,6 @@ const postsIndex: NextPage<Props> = (props) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    debugger;
     const ua = parser(context.req.headers['user-agent'])
     return {
         props : {
