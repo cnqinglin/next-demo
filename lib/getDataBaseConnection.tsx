@@ -16,17 +16,22 @@ const create = async function () {
 const promise = (async function () {
     const manager = getConnectionManager()
     let hasConnection = manager.has('default')
-    
-    if (!hasConnection) {
-        return create()
-    } else {
-        const current = manager.get('default')
-        if (current.isConnected) {
-            return current;
-        } else {
-            return create();
-        }  
-    }
+
+    const current = manager.has('default') && manager.get('default')
+    if (current) { await current.close() }
+    return create()
+    // if (!hasConnection) {
+    //     return create()
+    // } else {
+    //     const current = manager.get('default')
+    //     if (current.isConnected) {
+    //         await current.close()
+    //         // return current;
+    //         return create();
+    //     } else {
+    //         return create();
+    //     }  
+    // }
  })()
 
 export const getDataBaseConnection = async ()=>{
