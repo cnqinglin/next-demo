@@ -7,6 +7,7 @@ import { Post } from "src/entity/Post";
 import { User } from "src/entity/User";
 import { createConnection } from 'typeorm';
 var parser = require('ua-parser-js');
+import Link from 'next/link'
 
 type Props = {
     posts:Post[],
@@ -19,7 +20,6 @@ type Props = {
 const postsIndex: NextPage<Props> = (props) => {
     // const { browser,post } = props
     const { posts } = props
-    console.log('321123',posts)
     // const [width, setWidth] = useState<Number>(0);
     // useEffect(() => {
     //     const w = document.documentElement.clientWidth
@@ -31,7 +31,9 @@ const postsIndex: NextPage<Props> = (props) => {
         <div>
             {posts.map(post => <div key={ post.id}>
                 <h1>标题是：{post.title}</h1>
-                <h1>内容是：{ post.content}</h1>
+                <Link href={`/posts/${post.id}`} key={ post.id}>
+                    <a>内容是:{ post.content}</a>
+                </Link>
             </div>)}
         </div>
     )
