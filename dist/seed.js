@@ -12,42 +12,47 @@ var _typeorm = require("typeorm");
 
 var _User = require("./entity/User");
 
+var _Post = require("./entity/Post");
+
+var _Comment = require("./entity/Comment");
+
 (0, _typeorm.createConnection)().then( /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(connection) {
-    var manager, ui;
+    var manager, u1, p1, c1;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            manager = connection.manager;
-            ui = new _User.User();
-            ui.username = 'qinglin';
-            ui.passwordDigest = 'yueue';
+            manager = connection.manager; // 创建 user 1
+
+            u1 = new _User.User();
+            u1.username = 'frank';
+            u1.passwordDigest = 'xxx';
             _context.next = 6;
-            return manager.save(ui);
+            return manager.save(u1);
 
           case 6:
-            console.log('ui.id', ui.id); //   const Posts = await connection.manager.find(Post)
-            // if (Posts.length === 0) {
-            //   await connection.manager.save([1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(item => {
-            //     return new Post({title:`title${item}`,content:`这是我的弟${item}数据库`})
-            //   }))
-            // 这是第一种也是常规写法
-            // p.id = 123;
-            // p.title = "qinglin";
-            // p.content = "我的数据库"
-            // 这种第二种写法，对应Posts.ts 中的public写法
-            // await connection.manager.save([
-            //   new Post(this, { 'qinglin0', '我的数据库0'}),
-            //   new Post('qinglin1', '我的数据库1'),
-            //   new Post('qinglin2', '我的数据库2'),
-            //   new Post('qinglin3', '我的数据库3'),
-            // ]);
-            // } else {
-            // }
-            // connection.close()
+            // 创建 post 1
+            p1 = new _Post.Post();
+            p1.title = 'Post 1';
+            p1.content = 'My First Post';
+            p1.author = u1;
+            _context.next = 12;
+            return manager.save(p1);
 
-          case 7:
+          case 12:
+            c1 = new _Comment.Comment();
+            c1.user = u1;
+            c1.post = p1;
+            c1.content = 'Awesome!';
+            _context.next = 18;
+            return manager.save(c1);
+
+          case 18:
+            connection.close();
+            console.log('OK!');
+
+          case 20:
           case "end":
             return _context.stop();
         }

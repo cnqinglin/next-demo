@@ -1,37 +1,27 @@
-import "reflect-metadata";
-import {createConnection} from "typeorm";
-import { User } from "./entity/User";
+import 'reflect-metadata';
+import {createConnection} from 'typeorm';
+import {User} from './entity/User';
+import {Post} from './entity/Post';
+import {Comment} from './entity/Comment';
 
 createConnection().then(async connection => {
-
-  const { manager } = connection
-  const ui = new User()
-  ui.username = 'qinglin';
-  ui.passwordDigest = 'yueue';
-  await manager.save(ui)
-  console.log('ui.id', ui.id)
-  //   const Posts = await connection.manager.find(Post)
-  // if (Posts.length === 0) {
-    
-  //   await connection.manager.save([1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(item => {
-  //     return new Post({title:`title${item}`,content:`这是我的弟${item}数据库`})
-  //   }))
-
-    // 这是第一种也是常规写法
-    // p.id = 123;
-    // p.title = "qinglin";
-    // p.content = "我的数据库"
-    
-    // 这种第二种写法，对应Posts.ts 中的public写法
-    // await connection.manager.save([
-    //   new Post(this, { 'qinglin0', '我的数据库0'}),
-    //   new Post('qinglin1', '我的数据库1'),
-    //   new Post('qinglin2', '我的数据库2'),
-    //   new Post('qinglin3', '我的数据库3'),
-    // ]);
-  
-  // } else {
-    
-  // }
-  // connection.close()
+  const {manager} = connection;
+  // 创建 user 1
+  const u1 = new User();
+  u1.username = 'frank';
+  u1.passwordDigest = 'xxx';
+  await manager.save(u1);
+  // 创建 post 1
+  const p1 = new Post();
+  p1.title = 'Post 1';
+  p1.content = 'My First Post';
+  p1.author = u1;
+  await manager.save(p1);
+  const c1 = new Comment();
+  c1.user = u1;
+  c1.post = p1;
+  c1.content = 'Awesome!';
+  await manager.save(c1);
+  connection.close();
+  console.log('OK!')
 }).catch(error => console.log(error));
