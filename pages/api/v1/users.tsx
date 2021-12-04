@@ -6,43 +6,19 @@ import { getDataBaseConnection } from "lib/getDataBaseConnection";
 const Users: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     const { username, password, passwordConfirmation } = req.body
 
-    // 封装报错信息
-    const errors = {
-        username: [] as string[],
-        password: [] as string[],
-        passwordConfirmation: [] as string[],
-    }
+    const user = new User()
 
-    if (username.trim() === '') {
-        errors.username.push('用户名不能为空')
-    }
-    if (!/[a-zA-Z0-9]/.test(username.trim())) {
-        errors.username.push('用户名格式不正确')
-    }
-    if (username.trim().length > 42) {
-        errors.username.push('用户名长度过长')
-    }
-    if (username.trim().length < 3) {
-        errors.username.push('用户名长度过短')
-    }
-    if (password === '') {
-        errors.password.push('密码不能为空')
-    }
-    // ui.username = username;
-    if (password !== passwordConfirmation) {
-        errors.passwordConfirmation.push('密码不匹配')
-    }
-
-    const hasErrors = Object.values(errors).find(v => v.length > 0);
-    console.log('hasErrors',hasErrors)
+    user.username = username.trim();
+    user.password = password;
+    user.passwordConfirmation = passwordConfirmation;
+    user.validate()
     res.setHeader('Content-Type', 'application/json;charset=utf-8')
-    if (hasErrors) {
+    if (await user.hasError()) {
         res.statusCode = 422;
-        res.write(JSON.stringify(errors))
+        res.write(JSON.stringify(user.errors))
     } else {
-        const user = new User()
-        user.username = username.trim();
-        user.passwordDigest = md5(password)
+        
+        user.passwordDigest =md5(user.password);
 
         const connection = await getDataBaseConnection()
         await connection.manager.save(user)
@@ -52,8 +28,8 @@ const Users: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) 
     }
 
     res.end()
-    console.log('打印errors 的值：', Object.values(errors))
-    console.log('打印errors 的键：', Object.keys(errors))
+    console.log('打印errors 的值：', Object.values(user.errors))
+    console.log('打印errors 的键：', Object.keys(user.errors))
 
 
 }
