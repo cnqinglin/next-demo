@@ -31,7 +31,11 @@ var _Comment = require("./Comment");
 
 var _getDataBaseConnection = require("lib/getDataBaseConnection");
 
-var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7;
+var _md = _interopRequireDefault(require("md5"));
+
+var _lodash = _interopRequireDefault(require("lodash"));
+
+var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7;
 
 var User = (_dec = (0, _typeorm.Entity)('users'), _dec2 = (0, _typeorm.PrimaryGeneratedColumn)('increment'), _dec3 = (0, _typeorm.Column)('varchar'), _dec4 = (0, _typeorm.Column)('varchar'), _dec5 = (0, _typeorm.CreateDateColumn)(), _dec6 = (0, _typeorm.UpdateDateColumn)(), _dec7 = (0, _typeorm.OneToMany)(function () {
   return _Post.Post;
@@ -41,7 +45,7 @@ var User = (_dec = (0, _typeorm.Entity)('users'), _dec2 = (0, _typeorm.PrimaryGe
   return _Comment.Comment;
 }, function (Comment) {
   return Comment.post;
-}), _dec(_class = (_class2 = /*#__PURE__*/function () {
+}), _dec9 = (0, _typeorm.BeforeInsert)(), _dec(_class = (_class2 = /*#__PURE__*/function () {
   function User() {
     (0, _classCallCheck2["default"])(this, User);
     (0, _initializerDefineProperty2["default"])(this, "id", _descriptor, this);
@@ -98,7 +102,7 @@ var User = (_dec = (0, _typeorm.Entity)('users'), _dec2 = (0, _typeorm.PrimaryGe
                 found = _context.sent;
 
                 if (found.length > 0) {
-                  this.errors.username.push('用户名已存在，不能重复注册');
+                  this.errors.username.push('用户名长度过短hhhh');
                 }
 
                 if (this.password === '') {
@@ -125,11 +129,22 @@ var User = (_dec = (0, _typeorm.Entity)('users'), _dec2 = (0, _typeorm.PrimaryGe
       return validate;
     }()
   }, {
-    key: "hasError",
-    value: function hasError() {
+    key: "hasErrors",
+    value: function hasErrors() {
       return !!Object.values(this.errors).find(function (v) {
         return v.length > 0;
       });
+    } // 注释器：在保存之前创建passeordDigest
+
+  }, {
+    key: "generatePasswordDigest",
+    value: function generatePasswordDigest() {
+      this.passwordDigest = (0, _md["default"])(this.password);
+    }
+  }, {
+    key: "toJSON",
+    value: function toJSON() {
+      return _lodash["default"].omit(this, ['password', 'passwordConfirmation', 'passwordDigest', 'errors']);
     }
   }]);
   return User;
@@ -168,5 +183,5 @@ var User = (_dec = (0, _typeorm.Entity)('users'), _dec2 = (0, _typeorm.PrimaryGe
   enumerable: true,
   writable: true,
   initializer: null
-})), _class2)) || _class);
+}), (0, _applyDecoratedDescriptor2["default"])(_class2.prototype, "generatePasswordDigest", [_dec9], Object.getOwnPropertyDescriptor(_class2.prototype, "generatePasswordDigest"), _class2.prototype)), _class2)) || _class);
 exports.User = User;
