@@ -1,12 +1,21 @@
-import {Column, CreateDateColumn, Entity, UpdateDateColumn,OneToMany,PrimaryGeneratedColumn, BeforeInsert} from "typeorm";
-import { Post } from "./Post";
-import { Comment } from './Comment'
-import { getDataBaseConnection } from "lib/getDataBaseConnection";
-import md5 from 'md5';
-import _ from 'lodash';
-
-@Entity('users')
-export class User {
+import {
+    BeforeInsert,
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinColumn, OneToMany,
+    OneToOne,
+    PrimaryGeneratedColumn, Unique,
+    UpdateDateColumn
+  } from 'typeorm';
+  import {Post} from './Post';
+  import {Comment} from './Comment';
+  import md5 from 'md5';
+  import _ from 'lodash';
+import { getDataBaseConnection } from 'lib/getDataBaseConnection';
+  
+  @Entity('users')
+  export class User {
     @PrimaryGeneratedColumn('increment')
     id: number;
     @Column('varchar')
@@ -17,57 +26,54 @@ export class User {
     createdAt: Date;
     @UpdateDateColumn()
     updatedAt: Date;
-    @OneToMany(() => Post, post => post.author)
-    Posts: Post[];
-    @OneToMany(() => Comment, Comment => Comment.post)
+    @OneToMany(type => Post, post => post.author)
+    posts: Post[];
+    @OneToMany(type => Comment, comment => comment.user)
     comments: Comment[];
-    
-    // 封装报错信息
     errors = {
-        username: [] as string[],
-        password: [] as string[],
-        passwordConfirmation: [] as string[],
-    }
-
+      username: [] as string[],
+      password: [] as string[],
+      passwordConfirmation: [] as string[]
+    };
     password: string;
     passwordConfirmation: string;
-
+  
     async validate() {
-        if (this.username.trim() === '') {
-            this.errors.username.push('用户名不能为空')
-        }
-        if (!/[a-zA-Z0-9]/.test(this.username.trim())) {
-            this.errors.username.push('用户名格式不正确')
-        }
-        if (this.username.trim().length > 42) {
-            this.errors.username.push('用户名长度过长')
-        }
-        if (this.username.trim().length < 3) {
-            this.errors.username.push('用户名长度过短')
-        }
-        let found = await (await getDataBaseConnection()).manager.find(User, { username: this.username });
-        if (found.length > 0) {
-            this.errors.username.push('用户名长度过短hhhh')
-        }
-        if (this.password === '') {
-            this.errors.password.push('密码不能为空')
-        }
-        // ui.username = username;
-        if (this.password !== this.passwordConfirmation) {
-            this.errors.passwordConfirmation.push('密码不匹配')
-        }   
+      if (this.username.trim() === '') {
+        this.errors.username.push('不能为空');
+      }
+      if (!/[a-zA-Z0-9]/.test(this.username.trim())) {
+        this.errors.username.push('格式不合法');
+      }
+      if (this.username.trim().length > 42) {
+        this.errors.username.push('太长');
+      }
+      if (this.username.trim().length <= 3) {
+        this.errors.username.push('太短');
+      }
+      const found = await (await getDataBaseConnection()).manager.find(
+        User, {username: this.username});
+      if (found.length > 0) {
+        this.errors.username.push('已存在，不能重复注册');
+      }
+      if (this.password === '') {
+        this.errors.password.push('不能为空');
+      }
+      if (this.password !== this.passwordConfirmation) {
+        this.errors.passwordConfirmation.push('密码不匹配');
+      }
     }
+  
     hasErrors() {
-        return !!Object.values(this.errors).find(v => v.length > 0);
+      return !!Object.values(this.errors).find(v => v.length > 0);
     }
-
-    // 注释器：在保存之前创建passeordDigest
+  
     @BeforeInsert()
     generatePasswordDigest() {
-        this.passwordDigest = md5(this.password);
+      this.passwordDigest = md5(this.password);
     }
-
+  
     toJSON() {
-        return _.omit(this,['password','passwordConfirmation','passwordDigest','errors'])
+      return _.omit(this, ['password', 'passwordConfirmation', 'passwordDigest', 'errors']);
     }
-}
+  }

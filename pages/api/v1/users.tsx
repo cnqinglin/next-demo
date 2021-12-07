@@ -1,30 +1,28 @@
-import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
-import { User } from 'src/entity/User'
-import { getDataBaseConnection } from "lib/getDataBaseConnection";
+import {NextApiHandler} from 'next';
+import {User} from '../../../src/entity/User';
+import {useEffect} from 'react';
+import md5 from 'md5';
+import { getDataBaseConnection } from 'lib/getDataBaseConnection';
 
-const Users: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
-    const { username, password, passwordConfirmation } = req.body
-    const connection = await getDataBaseConnection()
-    const user = new User()
-    user.username = username.trim();
-    user.password = password;
-    user.passwordConfirmation = passwordConfirmation;
-    res.setHeader('Content-Type', 'application/json;charset=utf-8')
-    user.validate()
+const Posts: NextApiHandler = async (req, res) => {
+  const {username, password, passwordConfirmation} = req.body;
+  const connection = await getDataBaseConnection();// 第一次链接能不能用 get
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
 
+  const user = new User();
+  user.username = username.trim();
+  user.password = password;
+  user.passwordConfirmation = passwordConfirmation;
+  await user.validate();
   if (user.hasErrors()) {
-        res.statusCode = 422;
-        res.write(JSON.stringify(user.errors));
-      } else {
-        // user.passwordDigest =md5(user.password);
-        await connection.manager.save(user);
-        res.statusCode = 200;
-        res.write(JSON.stringify(user))
-    }
+    res.statusCode = 422;
+    res.write(JSON.stringify(user.errors));
+  } else {
+    await connection.manager.save(user);
+    res.statusCode = 200;
+    res.write(JSON.stringify(user));
+  }
+  res.end();
+};
 
-    res.end()
-
-
-}
-
-export default Users;
+export default Posts;
