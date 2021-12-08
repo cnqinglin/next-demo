@@ -2,7 +2,7 @@ import React from 'react';
 import {getPost, getPostIds} from '../../lib/posts';
 import {GetServerSideProps, NextPage} from 'next';
 import { type } from 'os';
-import { getDataBaseConnection } from 'lib/getDataBaseConnection';
+import { getDatabaseConnection } from 'lib/getDatabaseConnection';
 import { Post } from 'src/entity/Post';
 import { json } from 'stream/consumers';
 
@@ -26,7 +26,7 @@ export default postsShow;
 
 export const getServerSideProps: GetServerSideProps<any, {id:string},any> = async (context) => {
   console.log('id',context.params.id)
-  const connection = await getDataBaseConnection()  // 第一次连接不能用get
+  const connection = await getDatabaseConnection()  // 第一次连接不能用get
   const post = await connection.manager.findOne(Post,context.params.id)
 
   return {

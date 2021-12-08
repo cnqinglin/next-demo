@@ -1,6 +1,6 @@
 // 父目录serverSides是用来写SSR 的
 
-import { getDataBaseConnection } from "lib/getDataBaseConnection";
+import { getDatabaseConnection } from "lib/getDatabaseConnection";
 import { GetServerSideProps, NextPage, NextPageContext } from "next"
 import { useState,useEffect } from "react";
 import { Post } from "src/entity/Post";
@@ -40,7 +40,7 @@ const postsIndex: NextPage<Props> = (props) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const connection = await getDataBaseConnection()
+    const connection = await getDatabaseConnection()
     const post = await connection.manager.find(Post)
 
 

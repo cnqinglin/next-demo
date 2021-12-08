@@ -12,7 +12,7 @@ import {
   import {Comment} from './Comment';
   import md5 from 'md5';
   import _ from 'lodash';
-import { getDataBaseConnection } from 'lib/getDataBaseConnection';
+import { getDatabaseConnection } from 'lib/getDataBaseConnection';
   
   @Entity('users')
   export class User {
@@ -51,11 +51,10 @@ import { getDataBaseConnection } from 'lib/getDataBaseConnection';
       if (this.username.trim().length <= 3) {
         this.errors.username.push('太短');
       }
-      const found = await (await getDataBaseConnection()).manager.find(
-        User, {username: this.username});
-      if (found.length > 0) {
-        this.errors.username.push('已存在，不能重复注册');
-      }
+      // const found = await (await getDatabaseConnection()).manager.find(User, { username:this.username });
+      // if (found.length > 0) {
+      //   this.errors.username.push('已存在，不能重复注册');
+      // }
       if (this.password === '') {
         this.errors.password.push('不能为空');
       }
