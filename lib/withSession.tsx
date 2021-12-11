@@ -1,8 +1,7 @@
 import {withIronSession} from 'next-iron-session';
-import { NextApiHandler } from 'next';
-console.log('llll',process.env.SECRET);
+import { GetServerSideProps, NextApiHandler } from 'next';
 
-export function withSession(handler: NextApiHandler) {
+export function withSession(handler: NextApiHandler | GetServerSideProps) {
     
     return withIronSession(handler, {
         // password:'c2a85490-cc60-4f21-94e8-8dc5dd3220da',
