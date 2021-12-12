@@ -43,17 +43,20 @@ const SignUp: NextPage = () => {
           {
             label: '用户名:',
             type: 'text',
+            value:formData.username,
             onChange: e => onChange('username',e.target.value),
             errors: errors.username
           }, {
             label: '密码：',
             type: 'password',
+            value:formData.password,
             onChange: e => onChange('password',e.target.value),
             errors: errors.password,
           },
           {
             label: '确认密码：',
             type: 'password',
+            value:formData.passwordConfirmation,
             onChange: e => onChange('passwordConfirmation',e.target.value),
             errors: errors.passwordConfirmation,
           }

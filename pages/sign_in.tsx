@@ -6,7 +6,6 @@ import { User } from 'src/entity/User';
 import { Form } from 'components/Form';
 
 const SignIn: NextPage<{ user: User }> = (props) => {
-  console.log('当前登录用户：', props.user)
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -52,11 +51,13 @@ const SignIn: NextPage<{ user: User }> = (props) => {
           {
             label: '用户名:',
             type: 'text',
+            value:formData.username,
             onChange: e => onChange('username',e.target.value),
             errors: errors.username
           }, {
             label: '密码：',
             type: 'password',
+            value:formData.password,
             onChange: e => onChange('password',e.target.value),
             errors: errors.password,
           }

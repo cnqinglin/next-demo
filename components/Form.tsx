@@ -6,30 +6,32 @@ type Props = {
     onSubmit: FormEventHandler;
     fields: {
         label: string,
-        type: 'text' | 'password',
-        onChange: ChangeEventHandler<HTMLInputElement>,
+        type: 'text' | 'password' | 'textarea',
+        value:string | number,
+        onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>,
         errors: string[],
     }[],
-    buttons:React.ReactChild
+    buttons: React.ReactChild
 }
 
 export const Form: React.FC<Props> = (props) => {
     return (
-        <form onSubmit={ props.onSubmit}>
+        <form onSubmit={props.onSubmit}>
             {props.fields.map(field =>
                 <div key={field.label}>
                     <label>
                         {field.label}
-                        <input type={field.type} onChange={field.onChange} />
+                        {field.type === "text" ? <input type={field.type} value={ field.value} onChange={field.onChange} /> :
+                            <textarea onChange={field.onChange}>{ }</textarea>}
                     </label>
                     {
-                    field.errors?.length > 0 && <div>
-                        { field.errors.join(',')}
-                    </div>}
+                        field.errors?.length > 0 && <div>
+                            {field.errors.join(',')}
+                        </div>}
                 </div>
             )}
             <div>
-              {props.buttons}
+                {props.buttons}
             </div>
         </form>
     )
