@@ -1,5 +1,5 @@
-import { AxiosResponse } from 'axios';
 import {ChangeEventHandler, ReactChild, useCallback, useState} from 'react';
+import {AxiosResponse} from 'axios';
 
 type Field<T> = {
   label: string,
@@ -11,13 +11,13 @@ type useFormOptions<T> = {
   fields: Field<T>[];
   buttons: ReactChild;
   submit: {
-    request: (formData: T) => Promise<AxiosResponse<T>>,
-    message:string
+    request: (formData: T) => Promise<AxiosResponse<T>>;
+    message: string;
   }
 }
 
 export function useForm<T>(options: useFormOptions<T>) {
-  const {initFormData, fields, buttons, submit} = options
+  const {initFormData, fields, buttons, submit} = options;
   // 非受控
   const [formData, setFormData] = useState(initFormData);
   // initFormData = {username:'', password:''}
@@ -36,27 +36,27 @@ export function useForm<T>(options: useFormOptions<T>) {
   }, [formData]);
   const _onSubmit = useCallback((e) => {
     e.preventDefault();
-    submit.request(formData).then(
-      () => {
-        window.alert(submit.message)
-      },
-      (error) => {
+    submit.request(formData).then(() => {
+        window.alert(submit.message);
+      }, (error) => {
         if (error.response) {
           const response: AxiosResponse = error.response;
           if (response.status === 422) {
-            setErrors(response.data)
+            setErrors(response.data);
           }
         }
       }
-    )
-  }, [submit,formData]);
+    );
+
+  }, [submit, formData]);
   const form = (
     <form onSubmit={_onSubmit}>
       {fields.map(field =>
-          <div key={ field.key.toString()}>
+        <div key={field.key.toString()}>
           <label>{field.label}
             {field.type === 'textarea' ?
-              <textarea onChange={(e) => onChange(field.key, e.target.value)} value={formData[field.key].toString()}></textarea>
+              <textarea onChange={(e) => onChange(field.key, e.target.value)}
+                value={formData[field.key].toString()}/>
               :
               <input type={field.type} value={formData[field.key].toString()}
                 onChange={(e) => onChange(field.key, e.target.value)}/>
