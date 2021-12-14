@@ -1,4 +1,7 @@
 // 封装Form组件
+/**
+ * 这个组件以后不会再用了，仅供学习使用，封装的思路 
+ **/
 import { type } from "os"
 import { ChangeEventHandler, FormEventHandler } from "react"
 
