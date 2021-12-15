@@ -2,9 +2,9 @@ import React from 'react';
 import {getPost, getPostIds} from '../../lib/posts';
 import {GetServerSideProps, NextPage} from 'next';
 import { type } from 'os';
-import { getDatabaseConnection } from 'lib/getDatabaseConnection';
 import { Post } from 'src/entity/Post';
 import { json } from 'stream/consumers';
+import { getDatabaseConnection } from 'lib/getDataBaseConnection';
 
 type Props = {
     id:string,
@@ -28,7 +28,6 @@ export const getServerSideProps: GetServerSideProps<any, {id:string},any> = asyn
   console.log('id',context.params.id)
   const connection = await getDatabaseConnection()  // 第一次连接不能用get
   const post = await connection.manager.findOne(Post,context.params.id)
-
   return {
     props: {
       post:JSON.parse(JSON.stringify(post))
