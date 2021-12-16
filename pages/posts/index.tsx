@@ -4,6 +4,7 @@ import { getDatabaseConnection } from "lib/getDataBaseConnection"
 import { GetServerSideProps, NextPage } from "next"
 import LINK from 'next/link'
 import { Post } from "src/entity/Post"
+const queryString = require('querystring');
 
 // import { GetStaticProps, NextPage } from "next";
 // import { type } from "os";
@@ -68,7 +69,10 @@ import { Post } from "src/entity/Post"
 // }
 
 type Props = {
-  posts:Post[],
+  posts: Post[];
+  total: Number;
+  perpage: Number;
+  page: Number;
   // browser: {
   //     name: string;
   //     version: string;
@@ -92,23 +96,40 @@ const PostsIndex: NextPage<Props> = (props) => {
             <div>
             <LINK href={`/posts/${post.id}`} key={ post.id}>
                   <a>内容是:{ post.content}</a>
-              </LINK>
+            </LINK>
             </div>
+            <footer>
+              {`每页有${props.perpage}条,当前第${props.page}页，总共${props.total}条数据`}
+              <LINK href={`?page=${props.page - 1}`}><a>上一页</a></LINK>
+              |
+              <LINK href={`?page=${props.page + 1}`}><a>下一页</a></LINK>
+            </footer>
           </div>)}
       </div>
   )
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const connection = await getDatabaseConnection()
-  const post = await connection.manager.find(Post)
-
-
-  // const ua = parser(context.req.headers['user-agent'])
+  const index = context.req.url.indexOf('?');
+  const search = context.req.url.substr(index + 1);
+  const query = queryString.parse(search);
+  console.log('234', query);
+  const page = parseInt(query.page.toString()) || 1;
+  const connection = await getDatabaseConnection();
+  const perpage = 3;
+  const [posts,total] = await connection.manager.findAndCount(Post, { skip: (page - 1) * perpage, take: perpage });
+  console.log('rrrrr1', posts);
+  console.log('rrrrr2',total);
+  
+  
+  // const ua = parser(context.req.headers['user-agent']);
   return {
       props : {
           // browser: ua.browser,
-          posts:JSON.parse(JSON.stringify(post)),
+      posts: JSON.parse(JSON.stringify(posts)),
+      total: total,
+      perpage: perpage,
+      page:page
       }
   }
 }
