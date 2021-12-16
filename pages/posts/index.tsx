@@ -72,7 +72,8 @@ type Props = {
   posts: Post[];
   total: Number;
   perpage: Number;
-  page: Number;
+  page: number;
+  pageTotal: number;
   // browser: {
   //     name: string;
   //     version: string;
@@ -81,31 +82,31 @@ type Props = {
 }
 const PostsIndex: NextPage<Props> = (props) => {
   // const { browser,post } = props
-  const { posts } = props
+  const { posts, total, perpage, page } = props
   // const [width, setWidth] = useState<Number>(0);
   // useEffect(() => {
   //     const w = document.documentElement.clientWidth
-  //     setWidth(w)
+  //     setWidth(wposts)
   // },[])
 
 
   return (
-      <div>
-          {posts.map(post => <div key={ post.id}>
-            <h1>标题是：{post.title}</h1>
-            <div>
-            <LINK href={`/posts/${post.id}`} key={ post.id}>
-                  <a>内容是:{ post.content}</a>
-            </LINK>
-            </div>
-            <footer>
-              {`每页有${props.perpage}条,当前第${props.page}页，总共${props.total}条数据`}
-              <LINK href={`?page=${props.page - 1}`}><a>上一页</a></LINK>
-              |
-              <LINK href={`?page=${props.page + 1}`}><a>下一页</a></LINK>
-            </footer>
-          </div>)}
-      </div>
+    <div>
+      {posts.map(post => <div key={post.id}>
+        <h1>标题是：{post.title}</h1>
+        <div>
+          <LINK href={`/posts/${post.id}`} key={post.id}>
+            <a>内容是:{post.content}</a>
+          </LINK>
+        </div>
+      </div>)}
+      <footer>
+        {`每页有${perpage}条,当前第${page}页，总共${total}条数据`}
+        {props.page !== 1 && <LINK href={`?page=${props.page - 1}`}><a>上一页</a></LINK>}
+        {props.page < props.pageTotal && <a>|</a>}
+        {props.page < props.pageTotal && <LINK href={`?page=${page + 1}`}><a>下一页</a></LINK>}
+      </footer>
+    </div>
   )
 }
 
@@ -117,20 +118,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const page = parseInt(query.page.toString()) || 1;
   const connection = await getDatabaseConnection();
   const perpage = 3;
-  const [posts,total] = await connection.manager.findAndCount(Post, { skip: (page - 1) * perpage, take: perpage });
+  const [posts, total] = await connection.manager.findAndCount(Post, { skip: (page - 1) * perpage, take: perpage });
   console.log('rrrrr1', posts);
-  console.log('rrrrr2',total);
-  
-  
+  console.log('rrrrr2', total);
+
+
   // const ua = parser(context.req.headers['user-agent']);
   return {
-      props : {
-          // browser: ua.browser,
+    props: {
+      // browser: ua.browser,
       posts: JSON.parse(JSON.stringify(posts)),
-      total: total,
-      perpage: perpage,
-      page:page
-      }
+      total: total,   // 信息总条数
+      perpage: perpage,  // 每一页条数
+      page: page, // 第几页（页码）
+      pageTotal: Math.ceil(total / perpage)   // 总页数
+    }
   }
 }
 
