@@ -14,18 +14,17 @@ type Props = {
 const postsIndex: NextPage<Props> = (props) => {
     const { browser } = props
 
-    const [width, setWidth] = useState<Number>(0);
-    useEffect(() => {
-        debugger;
-        const w = document.documentElement.clientWidth
-        setWidth(w)
-    },[])
+    // const [width, setWidth] = useState<Number>(0);
+    // useEffect(() => {
+    //     const w = document.documentElement.clientWidth
+    //     setWidth(w)
+    // },[])
 
 
     return (
         <div>
             <h3>你的浏览器名称是：{browser.name}</h3>
-            <h3>你的浏览窗口宽度是：{width}</h3>
+            {/* <h3>你的浏览窗口宽度是：{width}</h3> */}
         </div>
     )
 }

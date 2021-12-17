@@ -22,7 +22,7 @@ export const usePager = (options: Options) => {
     numbers.push(total);
     const X = _.uniq(numbers).sort()
         .filter(current => current >= 1 && current <= total)
-        .reduce((prev, current) => current - (prev[prev.length - 1] || 0) === 1 ? prev.concat(current) : prev.concat(-1, current), []);
+        .reduce((prev, current:number) => current - (prev[prev.length - 1] || 0) === 1 ? prev.concat(current) : prev.concat(-1, current), []);
 
         const pager = (
             <div className="wrapper">

@@ -115,7 +115,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const query = queryString.parse(search);
   const page = parseInt(query.page) || 1;
   const connection = await getDatabaseConnection();
-  const perpage = 3;
+  const perpage = 5;
   const [posts, total] = await connection.manager.findAndCount(Post, { skip: (page - 1) * perpage, take: perpage });
 
 

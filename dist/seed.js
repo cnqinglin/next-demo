@@ -53,7 +53,7 @@ var _Comment = require("./entity/Comment");
             return connection.close();
 
           case 20:
-            console.log('OK!');
+            return;
 
           case 21:
           case "end":
@@ -67,5 +67,5 @@ var _Comment = require("./entity/Comment");
     return _ref.apply(this, arguments);
   };
 }())["catch"](function (error) {
-  return console.log(error);
+  return;
 });

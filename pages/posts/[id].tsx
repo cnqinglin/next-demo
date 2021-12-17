@@ -6,12 +6,15 @@ import { Post } from 'src/entity/Post';
 import { json } from 'stream/consumers';
 import { getDatabaseConnection } from 'lib/getDataBaseConnection';
 
+
 type Props = {
-    id:string,
-    title: string;
-    date: string;
-    content: string;
+  // id:string,
+  // title: string;
+  // date: string;
+  // content: string;
+  post:Post
 }
+
 const postsShow: NextPage<Props> = (props) => {
   const { post } = props
   return (
@@ -25,7 +28,6 @@ const postsShow: NextPage<Props> = (props) => {
 export default postsShow;
 
 export const getServerSideProps: GetServerSideProps<any, {id:string},any> = async (context) => {
-  console.log('id',context.params.id)
   const connection = await getDatabaseConnection()  // 第一次连接不能用get
   const post = await connection.manager.findOne(Post,context.params.id)
   return {
