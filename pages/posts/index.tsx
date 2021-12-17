@@ -5,6 +5,7 @@ import { GetServerSideProps, NextPage } from "next"
 import LINK from 'next/link'
 import { Post } from "src/entity/Post"
 const queryString = require('querystring');
+import { usePager } from 'hooks/usePager';
 
 // import { GetStaticProps, NextPage } from "next";
 // import { type } from "os";
@@ -82,7 +83,8 @@ type Props = {
 }
 const PostsIndex: NextPage<Props> = (props) => {
   // const { browser,post } = props
-  const { posts, total, perpage, page } = props
+  const { posts, total, perpage, page, pageTotal } = props
+  const { pager } = usePager({total, perpage, page, pageTotal})
   // const [width, setWidth] = useState<Number>(0);
   // useEffect(() => {
   //     const w = document.documentElement.clientWidth
@@ -101,10 +103,7 @@ const PostsIndex: NextPage<Props> = (props) => {
         </div>
       </div>)}
       <footer>
-        {`每页有${perpage}条,当前第${page}页，总共${total}条数据`}
-        {props.page !== 1 && <LINK href={`?page=${props.page - 1}`}><a>上一页</a></LINK>}
-        {props.page < props.pageTotal && <a>|</a>}
-        {props.page < props.pageTotal && <LINK href={`?page=${page + 1}`}><a>下一页</a></LINK>}
+        {pager}
       </footer>
     </div>
   )
@@ -114,13 +113,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const index = context.req.url.indexOf('?');
   const search = context.req.url.substr(index + 1);
   const query = queryString.parse(search);
-  console.log('234', query);
-  const page = parseInt(query.page.toString()) || 1;
+  const page = parseInt(query.page) || 1;
   const connection = await getDatabaseConnection();
   const perpage = 3;
   const [posts, total] = await connection.manager.findAndCount(Post, { skip: (page - 1) * perpage, take: perpage });
-  console.log('rrrrr1', posts);
-  console.log('rrrrr2', total);
 
 
   // const ua = parser(context.req.headers['user-agent']);
