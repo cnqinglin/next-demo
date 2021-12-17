@@ -1,6 +1,6 @@
 // 封装分页组件（JSX 语法）
 
-import LINK from 'next/LINK';
+import LINK from 'next/link';
 import _ from 'lodash';
 type Options = {
     total: Number;
