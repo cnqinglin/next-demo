@@ -1,0 +1,5 @@
+node_modules
+# npm-debug.log
+# 不是npm ,我这里是yarn-debug.log,所以可以让所有的.log都不上传
+*.log
+# *.local
