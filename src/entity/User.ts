@@ -12,7 +12,7 @@ import {Post} from './Post';
 import {Comment} from './Comment';
 import md5 from 'md5';
 import _ from 'lodash';
-import { getDatabaseConnection } from 'lib/getDataBaseConnection';
+import { getDatabaseConnection } from 'lib/getDataBaseConnection';  // yarn migration:run 的时候如果报错，就要先注释这里的getDatabaseConnection
 
 @Entity('users')
 export class User {

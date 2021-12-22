@@ -29,6 +29,7 @@ const SignIn: NextPage<{ user: User }> = (props) => {
         window.alert('登录成功。。。。，是否跳转博客主页')
         const qurey = queryString.parse(location.search);
         window.location.href = qurey.return_to.toString();
+        // window.location.href = qurey.return_to;
       }
     },
   })

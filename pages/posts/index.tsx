@@ -21,7 +21,7 @@ const PostsIndex: NextPage<Props> = (props) => {
       <h1>文章列表({props.count}) 每页{props.perPage}</h1>
       {posts.map(post =>
         <div key={post.id}>
-          <Link href={`/posts/${post.id}`}>
+          <Link key={post.id} href={`/posts/${post.id}`}>
             <a>
               {post.title}
             </a>

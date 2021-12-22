@@ -33,6 +33,7 @@ var _getDataBaseConnection = require("lib/getDataBaseConnection");
 
 var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7;
 
+// yarn migration:run 的时候如果报错，就要先注释这里的getDatabaseConnection
 var User = (_dec = (0, _typeorm.Entity)('users'), _dec2 = (0, _typeorm.PrimaryGeneratedColumn)('increment'), _dec3 = (0, _typeorm.Column)('varchar'), _dec4 = (0, _typeorm.Column)('varchar'), _dec5 = (0, _typeorm.CreateDateColumn)(), _dec6 = (0, _typeorm.UpdateDateColumn)(), _dec7 = (0, _typeorm.OneToMany)('Post', 'author'), _dec8 = (0, _typeorm.OneToMany)('Comment', 'user'), _dec9 = (0, _typeorm.BeforeInsert)(), _dec(_class = (_class2 = /*#__PURE__*/function () {
   function User() {
     (0, _classCallCheck2["default"])(this, User);
