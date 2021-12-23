@@ -1,6 +1,7 @@
 import '../styles/globals.css'
 import styles from '../styles/myStyle.css'
 import Head from 'next/head'
+import 'github-markdown-css';
 
 function MyApp({ Component, pageProps }) {
   // 可用APP 保存一些全局状态

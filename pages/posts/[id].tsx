@@ -5,6 +5,7 @@ import { type } from 'os';
 import { Post } from 'src/entity/Post';
 import { json } from 'stream/consumers';
 import { getDatabaseConnection } from 'lib/getDataBaseConnection';
+import { marked } from 'marked';
 
 
 type Props = {
@@ -18,10 +19,26 @@ type Props = {
 const postsShow: NextPage<Props> = (props) => {
   const { post } = props
   return (
-    <div>
-      <h1>{post.title}</h1>
-      <article dangerouslySetInnerHTML={{__html:post.content}}></article>
-    </div>
+    <>
+    <div className="markdown-body">
+      <h1 className="title">{post.title}</h1>
+      <article dangerouslySetInnerHTML={{__html:marked(post.content)}}></article>
+      </div>
+      <style jsx>{`
+      .markdown-body{
+        box-sizing: border-box;
+        min-width: 200px;
+        max-width: 800px;
+        margin: 16px auto;
+        padding: 45px;
+      }
+      .title{
+        margin: 0 auto;
+        text-align: center;
+        padding-bottom: 16px;
+      }
+        `}</style>
+      </>
   );
 };
 

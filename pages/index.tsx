@@ -20,7 +20,7 @@ const Home: NextPage = () => {
             <style jsx>
                 {`
                     .cover{
-                        background: yellowgreen;
+                        background: rgba(96, 97, 99, 0.289);
                         height: 100vh;
                         display: flex;
                         justify-content: center;
