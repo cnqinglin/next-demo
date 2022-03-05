@@ -19,10 +19,9 @@ const PostEdit: NextPage<Props> = (props) => {
         ],
         buttons: <div className='actions'><button type="submit">保存</button></div>,
         submit: {
-          request: formData => axios.patch(`/api/v1/posts${id}`, formData),
+            request: formData => axios.patch(`/api/v1/posts/${id}`, { ...formData,id }),
           success: () => {
             window.alert('保存成功')
-            window.location.href = '/posts'
           }
         }
       });

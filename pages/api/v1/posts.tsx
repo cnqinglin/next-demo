@@ -5,11 +5,8 @@ import { getDatabaseConnection } from 'lib/getDataBaseConnection';
 
 
 const Posts: NextApiHandler = withSession(async (req, res) => {
-  if (req.method === 'PATCH') { 
-    const { title, content } = req.body
-    const post = new Post()
-    
-  }
+  const connection = await getDatabaseConnection();
+
   if (req.method === 'POST') {
     const {title, content} = req.body;
     const post = new Post();
@@ -22,7 +19,6 @@ const Posts: NextApiHandler = withSession(async (req, res) => {
           return;
       }
     post.author = user;
-    const connection = await getDatabaseConnection();
     await connection.manager.save(post);
     res.json(post);
   }
