@@ -1,12 +1,15 @@
 import {ChangeEventHandler, ReactChild, useCallback, useState} from 'react';
-import {AxiosResponse} from 'axios';
+import { AxiosResponse } from 'axios';
+import cs from 'classnames';
 
 type Field<T> = {
-  label: string,
-  type: 'text' | 'password' | 'textarea',
-  key: keyof T
+  label: string;
+  type: 'text' | 'password' | 'textarea';
+  key: keyof T;
+  className?: string ;
 }
 type useFormOptions<T> = {
+  // labelWidth: string;
   initFormData: T;
   fields: Field<T>[];
   buttons: ReactChild;
@@ -17,7 +20,9 @@ type useFormOptions<T> = {
 }
 
 export function useForm<T>(options: useFormOptions<T>) {
-  const {initFormData, fields, buttons, submit} = options;
+  const {
+    // labelWidth,
+    initFormData, fields, buttons, submit } = options;
   // 非受控
   const [formData, setFormData] = useState(initFormData);
   // initFormData = {username:'', password:''}
@@ -44,8 +49,7 @@ export function useForm<T>(options: useFormOptions<T>) {
             setErrors(response.data);
           } else if (response.status === 401) {
             window.alert('请先登录');
-            window.location.href =
-              `/sign_in?returnTo=${encodeURIComponent(window.location.pathname)}`;
+            window.location.href = `/sign_in?returnTo=${encodeURIComponent(window.location.pathname)}`;
           }
         }
       }
@@ -55,13 +59,20 @@ export function useForm<T>(options: useFormOptions<T>) {
   const form = (
     <form onSubmit={_onSubmit}>
       {fields.map(field =>
-        <div key={field.key.toString()}>
-          <label>{field.label}
+        <div key={field.key.toString()} className={ cs(`field-${field.key}`,field.className)}>
+          <label className="label">
+            <span className='text'
+              // style={{ width: labelWidth }}
+            >
+                {field.label}
+            </span>
             {field.type === 'textarea' ?
-              <textarea onChange={(e) => onChange(field.key, e.target.value)}
+              <textarea className='control'
+                onChange={(e) => onChange(field.key, e.target.value)}
                 value={formData[field.key].toString()}/>
               :
-              <input type={field.type} value={formData[field.key].toString()}
+              <input className='control'
+                type={field.type} value={formData[field.key].toString()}
                 onChange={(e) => onChange(field.key, e.target.value)}/>
             }
           </label>
@@ -70,9 +81,28 @@ export function useForm<T>(options: useFormOptions<T>) {
           </div>}
         </div>
       )}
-      <div>
+      <div className='btn'>
         {buttons}
       </div>
+      <style jsx>{`
+            .filrld{
+              margin: 8px 0;
+            }
+            .label {
+              display: flex;
+              line-height: 32px;
+            }
+            .label input {
+              height: 32px;
+            }
+            .label > .text{
+              white-space: nowrap;
+              margin-right: 1em;
+            }
+            .label > .control{
+              width: 100%;
+            }
+      `}</style>
     </form>
   );
   return {
