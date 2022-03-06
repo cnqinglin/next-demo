@@ -7,6 +7,8 @@ import {usePager} from '../../hooks/usePager';
 import { getDatabaseConnection } from 'lib/getDataBaseConnection';
 import { useCallback } from 'react';
 import { withSession } from 'lib/withSession'
+import axios from 'axios';
+import { useRouter } from 'next/dist/client/router';
 
 type Props = {
   posts: Post[];
@@ -19,9 +21,18 @@ type Props = {
 const PostsIndex: NextPage<Props> = (props) => {
   const {posts, count, page, totalPage,currentUser} = props;
   const { pager } = usePager({ page, totalPage });
-  // const editBlog = useCallback(() => {
-  //     window.location.href = '/posts/new'
-  // },[])
+  const router = useRouter()
+  const deleteBlog = (id:Number) => useCallback(() => {
+    axios.delete(`/api/v1/posts/${id}`).then(
+      () => {
+        window.alert('删除成功');
+        router.push('/posts')
+      },
+      () => {
+        window.alert('删除失败');
+      });
+  }, [id])
+
   return (
     <>
       <div className="posts">
@@ -41,6 +52,7 @@ const PostsIndex: NextPage<Props> = (props) => {
               {post.title}
             </a>
           </Link>
+          <button onClick={deleteBlog(post.id) }>删除</button>
         </div>
       )}
       <footer>
@@ -73,6 +85,12 @@ const PostsIndex: NextPage<Props> = (props) => {
           }
           .posts > .onePost > a:hover {
               color: blue;
+          }
+          .onePost {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
           }
         `}</style>
       </>

@@ -35,6 +35,7 @@ const PostsShow: NextPage<Props> = (props) => {
         </header>
         
         <article dangerouslySetInnerHTML={{ __html: marked(post.content) }}></article>
+        
       </div>
       <style jsx>{`
           .markdown-body{
