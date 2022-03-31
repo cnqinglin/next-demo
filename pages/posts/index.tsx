@@ -9,6 +9,7 @@ import { useCallback } from 'react';
 import { withSession } from 'lib/withSession'
 import axios from 'axios';
 import { useRouter } from 'next/dist/client/router';
+import { log } from 'console';
 
 type Props = {
   posts: Post[];
@@ -26,7 +27,16 @@ const PostsIndex: NextPage<Props> = (props) => {
     axios.delete(`/api/v1/posts/${id}`).then(
       () => {
         window.alert('删除成功');
-        router.push('/posts')
+        // router.push('/posts')
+        let index:number
+        for (let i = 0; i < posts.length; i++) { 
+          if (posts[i].id === id) { 
+            index = i
+          }
+        }
+        console.log('shabi1',index)
+        posts.slice(index - 1, index);
+        console.log('shabi2',posts)
       },
       () => {
         window.alert('删除失败');
@@ -70,6 +80,7 @@ const PostsIndex: NextPage<Props> = (props) => {
             display: flex;
             justify-content:center;
             align-items: center;
+            margin-bottom: 40px;
           }
           .posts > .head > h1{
             margin: 0;

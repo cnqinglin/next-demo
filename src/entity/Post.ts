@@ -13,7 +13,7 @@ import {
   @Entity('posts')
   export class Post {
     @PrimaryGeneratedColumn('increment')
-    id: number;
+    id: String;
     @Column('varchar')
     title: string;
     @Column('text')

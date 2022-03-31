@@ -17,7 +17,7 @@ import { getDatabaseConnection } from 'lib/getDataBaseConnection';  // yarn migr
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('increment')
-  id: number;
+  id: String;
   @Column('varchar')
   username: string;
   @Column('varchar')
@@ -40,24 +40,24 @@ export class User {
 
   async validate() {
     if (this.username.trim() === '') {
-      this.errors.username.push('不能为空');
+      this.errors.username.push('用户名不能为空');
     }
     if (!/[a-zA-Z0-9]/.test(this.username.trim())) {
-      this.errors.username.push('格式不合法');
+      this.errors.username.push('用户名格式不合法');
     }
     if (this.username.trim().length > 42) {
-      this.errors.username.push('太长');
+      this.errors.username.push('用户名太长');
     }
     if (this.username.trim().length <= 3) {
-      this.errors.username.push('太短');
+      this.errors.username.push('用户名太短');
     }
     const found = await (await getDatabaseConnection()).manager.find(
       User, {username: this.username});
     if (found.length > 0) {
-      this.errors.username.push('已存在，不能重复注册');
+      this.errors.username.push('用户名已存在，不能重复注册');
     }
     if (this.password === '') {
-      this.errors.password.push('不能为空');
+      this.errors.password.push('密码不能为空');
     }
     if (this.password !== this.passwordConfirmation) {
       this.errors.passwordConfirmation.push('密码不匹配');

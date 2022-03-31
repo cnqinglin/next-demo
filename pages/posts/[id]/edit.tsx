@@ -2,6 +2,7 @@ import axios from "axios";
 import { useForm } from "hooks/useForm";
 import { getDatabaseConnection } from "lib/getDataBaseConnection";
 import { NextPage, GetServerSideProps } from "next";
+import { useRouter } from "next/dist/client/router";
 
 
 type Props = {
@@ -9,9 +10,10 @@ type Props = {
     post: Post;
 }
 const PostEdit: NextPage<Props> = (props) => {
+  const router = useRouter()
     const { id , post } = props
     const { form } = useForm({
-        // labelWidth:'3em',
+        labelWidth:'3em',
         initFormData: { title: post.title , content: post.content},
         fields: [
           {label: '大标题', type: 'text', key: 'title',className:'',},
@@ -22,6 +24,7 @@ const PostEdit: NextPage<Props> = (props) => {
             request: formData => axios.patch(`/api/v1/posts/${id}`, { ...formData,id }),
           success: () => {
             window.alert('保存成功')
+            router.push('/posts');
           }
         }
       });

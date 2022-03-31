@@ -89,7 +89,7 @@ var SignIn = /*#__PURE__*/function () {
 
 
                 if (this.password === '') {
-                  this.errors.password.push('不能为空');
+                  this.errors.password.push('密码不能为空');
                 }
 
                 if (this.password) {// this.errors.passwordConfirmation.push('密码不匹配');

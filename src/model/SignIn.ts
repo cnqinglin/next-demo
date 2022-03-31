@@ -46,7 +46,7 @@ export class SignIn {
         //   this.errors.username.push('已存在，不能重复注册');
         // }
         if (this.password === '') {
-            this.errors.password.push('不能为空');
+            this.errors.password.push('密码不能为空');
         }
         if (this.password) {
             // this.errors.passwordConfirmation.push('密码不匹配');

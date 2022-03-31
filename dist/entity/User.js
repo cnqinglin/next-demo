@@ -63,19 +63,19 @@ var User = (_dec = (0, _typeorm.Entity)('users'), _dec2 = (0, _typeorm.PrimaryGe
             switch (_context.prev = _context.next) {
               case 0:
                 if (this.username.trim() === '') {
-                  this.errors.username.push('不能为空');
+                  this.errors.username.push('用户名不能为空');
                 }
 
                 if (!/[a-zA-Z0-9]/.test(this.username.trim())) {
-                  this.errors.username.push('格式不合法');
+                  this.errors.username.push('用户名格式不合法');
                 }
 
                 if (this.username.trim().length > 42) {
-                  this.errors.username.push('太长');
+                  this.errors.username.push('用户名太长');
                 }
 
                 if (this.username.trim().length <= 3) {
-                  this.errors.username.push('太短');
+                  this.errors.username.push('用户名太短');
                 }
 
                 _context.next = 6;
@@ -91,11 +91,11 @@ var User = (_dec = (0, _typeorm.Entity)('users'), _dec2 = (0, _typeorm.PrimaryGe
                 found = _context.sent;
 
                 if (found.length > 0) {
-                  this.errors.username.push('已存在，不能重复注册');
+                  this.errors.username.push('用户名已存在，不能重复注册');
                 }
 
                 if (this.password === '') {
-                  this.errors.password.push('不能为空');
+                  this.errors.password.push('密码不能为空');
                 }
 
                 if (this.password !== this.passwordConfirmation) {

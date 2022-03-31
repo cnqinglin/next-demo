@@ -1,6 +1,7 @@
 import {
   Column,
   CreateDateColumn,
+  Double,
   Entity,
   ManyToOne,
   OneToMany,
@@ -13,7 +14,7 @@ import {Post} from './Post';
 @Entity('comments')
 export class Comment {
   @PrimaryGeneratedColumn('increment')
-  id: number;
+  id: String;
   @Column('text')
   content: string;
   @ManyToOne('User', 'comments')
