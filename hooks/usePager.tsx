@@ -17,13 +17,15 @@ export const usePager = (options: Options) => {
   for (let i = page - 2; i <= page + 2; i++) {
     numbers.push(i);
   }
+  const total = numbers.length
   
   numbers.push(totalPage);
   const pageNumbers = _.uniq(numbers).sort().filter(n => n >= 1 && n <= totalPage)
     .reduce((result, n) => n - (result[result.length - 1] || 0) === 1 ?
       result.concat(n) : result.concat(-1, n), []);
   const pager = totalPage > 1 ? (
-      <div className="wrapper">
+    <div className="wrapper">
+      { <span>共 34 条</span> }
       {page !== 1 && <Link href={urlMaker(page - 1)}><a>上一页</a></Link>}
       {pageNumbers.map(n => n === -1 ?
         <span key={n}>...</span> :

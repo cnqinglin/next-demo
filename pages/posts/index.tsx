@@ -1,17 +1,18 @@
-import {GetServerSideProps, GetServerSidePropsContext, NextPage} from 'next';
-import {UAParser} from 'ua-parser-js';
-import {Post} from 'src/entity/Post';
+import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
+import { UAParser } from 'ua-parser-js';
+import { Post } from 'src/entity/Post';
 import Link from 'next/link';
 import qs from 'querystring';
-import {usePager} from '../../hooks/usePager';
+import { usePager } from '../../hooks/usePager';
 import { getDatabaseConnection } from 'lib/getDataBaseConnection';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { withSession } from 'lib/withSession'
 import axios from 'axios';
 import { useRouter } from 'next/dist/client/router';
 // import pn from '/assets/images/1.png'
 import Image from 'next/image'
 import { log } from 'console';
+import { useSet } from 'hooks/useSet';
 
 type Props = {
   posts: Post[];
@@ -22,25 +23,30 @@ type Props = {
   currentUser: number | null;
 }
 const PostsIndex: NextPage<Props> = (props) => {
-  const { posts, count, page, totalPage, currentUser } = props;  
+  const { posts, count, page, totalPage, currentUser } = props;
   const { pager } = usePager({ page, totalPage });
+
+  const [state, setState] = useState(false)
+  const { set } = useSet(state)
+
+
+  const setting = useCallback(() => {
+    if (state == false) {
+      setState(true)
+    } else {
+      setState(false)
+    }
+  }, [state])
+
   const router = useRouter()
-  let active:Boolean = false
-  console.log('111');
-  
-  const set = () => useCallback(() => { 
-    console.log('222');
-    active = true
-    console.log('333');
-  },[active])
-  const deleteBlog = (id:Number) => useCallback(() => {
+  const deleteBlog = (id: Number) => useCallback(() => {
     axios.delete(`/api/v1/posts/${id}`).then(
       () => {
         window.alert('删除成功');
         // router.push('/posts')
-        let index:number
-        for (let i = 0; i < posts.length; i++) { 
-          if (posts[i].id.toString() === id.toString()) { 
+        let index: number
+        for (let i = 0; i < posts.length; i++) {
+          if (posts[i].id.toString() === id.toString()) {
             index = i
           }
         }
@@ -49,82 +55,88 @@ const PostsIndex: NextPage<Props> = (props) => {
       () => {
         window.alert('删除失败');
       });
-  }, [id])
+  }, [id]);
+
 
   return (
     <>
       <div className='frame'>
         <span className='menu'>个人博客 / 文章列表</span>
         <a className='right'>
-            <Image
-              className='pic'
-              src="/avatar.png"
-              alt="Picture of the author"
-              width={40}
-              height={40}
+          <Image
+            className='pic'
+            src="/avatar.png"
+            alt="Picture of the author"
+            width={40}
+            height={40}
           />
-          <button onClick={set} className='set' style={{
+          <button onClick={setting} className='set' style={{
             backgroundColor: 'inherit',
-            borderColor:'inherit',  
-            verticalAlign:'middle',
-            padding:'0px',
+            borderColor: 'inherit',
+            verticalAlign: 'middle',
+            padding: '0px',
             width: '0px',
             height: '0px',
             borderTop: '10px solid black',
             borderRight: '10px solid transparent',
             borderLeft: '10px solid transparent',
             borderBottom: '10px solid transparent',
-          }}></button>
-          {active && <div style={{width:'20px',height:'20px'}}>你好</div>}
+            position: 'relative',
+          }}>
+            {set}
+          </button>
         </a>
       </div>
       <div className="posts">
         <header className="head">
           <Image
-              className='pic'
-              src="/files.png"
-              alt="Picture of the author"
-              width={14}
-              height={18}
+            className='pic'
+            src="/files.png"
+            alt="Picture of the author"
+            width={14}
+            height={18}
           />
           <h3>文章列表</h3>
           {
             currentUser && <Link href="/posts/new"><a>写文章</a></Link>
           }
         </header>
+        <main className='main'>
+
+        </main>
         <span className="bottomSt"></span>
-      {posts.map(post =>
-        <div key={post.id} className="onePost">
-          <div>
-            <Image
-                    className='pic'
-                    src="/fil.png"
-                    alt="Picture of the author"
-                    width={12}
-                    height={16}
-                    
-                />
-            <Link key={post.id} href={`/posts/${post.id}`}>
-            <a className='title'>
-              {post.title}
-            </a>
-          </Link>
+        {posts.map(post =>
+          <div key={post.id} className="onePost">
+            <div>
+              <Image
+                className='pic'
+                src="/fil.png"
+                alt="Picture of the author"
+                width={12}
+                height={16}
+
+              />
+              <Link key={post.id} href={`/posts/${post.id}`}>
+                <a className='title'>
+                  {post.title}
+                </a>
+              </Link>
+            </div>
+            <div>
+              <Image
+                className='pic'
+                src="/delete.png"
+                alt="Picture of the author"
+                width={12}
+                height={14}
+              />
+              <button className='btn' onClick={deleteBlog(post.id)}>删除</button>
+            </div>
           </div>
-          <div>
-          <Image
-                    className='pic'
-                    src="/delete.png"
-                    alt="Picture of the author"
-                    width={12}
-                    height={14}
-            />
-            <button className='btn' onClick={deleteBlog(post.id) }>删除</button>
-          </div>
-        </div>
-      )}
+        )}
         <footer className='foot'>
-        {pager}
-      </footer>
+          {pager}
+        </footer>
       </div>
       <style jsx>{`
         .frame {
@@ -159,7 +171,6 @@ const PostsIndex: NextPage<Props> = (props) => {
             display: flex;
             justify-content:center;
             align-items: center;
-            margin-bottom: 40px;
             padding-bottom: 20px;
             border-bottom: 4px solid rgb(201, 199, 199);
           }
@@ -178,8 +189,13 @@ const PostsIndex: NextPage<Props> = (props) => {
           .posts > .head > a:hover {
               color: red;
           }
+          .posts > .main {
+            width: 100%;
+            height: 130px;
+            border: 1px solid red;
+          }
           .posts > .onePost {
-            padding: 8px 0;
+            padding: 20px 6px;
             border-bottom: 1px solid #ddd;
             padding-top: 20px;
           }
@@ -210,21 +226,21 @@ const PostsIndex: NextPage<Props> = (props) => {
             color: rgba(49, 48, 48,.5); 
           }
         `}</style>
-      </>
+    </>
   );
 };
 export default PostsIndex;
 
-export const getServerSideProps: GetServerSideProps = withSession(async (context:GetServerSidePropsContext) => {
+export const getServerSideProps: GetServerSideProps = withSession(async (context: GetServerSidePropsContext) => {
   const index = context.req.url.indexOf('?');
   const search = context.req.url.substr(index + 1);
   const query = qs.parse(search);
   const page = parseInt(query.page?.toString()) || 1;
   const currentUser = context.req.session.get('currentUser') || null;
   const connection = await getDatabaseConnection();// 第一次链接能不能用 get
-  const perPage = 4;
+  const perPage = 10;
   const [posts, count] = await connection.manager.findAndCount(Post,
-    {skip: (page - 1) * perPage, take: perPage});
+    { skip: (page - 1) * perPage, take: perPage });
   const ua = context.req.headers['user-agent'];
   const result = new UAParser(ua).getResult();
   return {

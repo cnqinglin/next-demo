@@ -1,4 +1,4 @@
-// 自定義kook
+// 自定义hook
 import { useEffect, useState } from "react";
 import axios from "axios";
 // 自己声明一个类型
