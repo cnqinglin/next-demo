@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import Link from 'next/link'
 import Head from 'next/head'
 import Img from 'next/image'
-// import png from 'assets/images/1.png'
+import png from 'assets/images/fil.png';
 
 
 function About() {
