@@ -12,7 +12,7 @@ import { useRouter } from 'next/dist/client/router';
 // import pn from '/assets/images/1.png'
 import Image from 'next/image'
 import { log } from 'console';
-import { useSet } from 'hooks/useSet';
+import { useSet } from 'hooks/useDialog';
 
 type Props = {
   posts: Post[];
