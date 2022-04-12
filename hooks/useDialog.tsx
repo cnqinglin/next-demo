@@ -46,11 +46,14 @@ export function useSet(props: Props) {
                     right: -50px;
                     top: 38px;
                     width: 100px;
-                    -webkit-box-shadow: -2px 3px 9px 1px rgba(122,113,122,0.39);
--moz-box-shadow: -2px 3px 9px 1px rgba(122,113,122,0.39);
-box-shadow: -2px 3px 9px 1px rgba(122,113,122,0.39);
+                    -webkit-box-shadow: -2px 3px 9px 1px rgba(100,100,100,0.39);
+-moz-box-shadow: -2px 3px 9px 1px rgba(100,100,100,0.39);
+box-shadow: -2px 3px 9px 1px rgba(100,100,100,0.39);
+                    background-color: aliceblue;
+                    z-index: 100;
                 }
                 .btn{
+                    background-color: inherit;
                     width: 100%;
                     border: none;
                     outline: none;

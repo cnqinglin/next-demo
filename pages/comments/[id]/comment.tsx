@@ -4,7 +4,13 @@ import { request } from "https";
 import { getDatabaseConnection } from "lib/getDataBaseConnection";
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
-
+type Post = {
+    id: string;
+    date: string;
+    title: string;
+    content: string;
+    htmlContent: string;
+  }
 type Props = {
     id: Number;
     post: Post;

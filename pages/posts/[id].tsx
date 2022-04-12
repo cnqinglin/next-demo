@@ -7,7 +7,12 @@ import { marked } from 'marked';
 import { withSession } from 'lib/withSession'
 import { Comment } from 'src/entity/Comment';
 import { log } from 'console';
-
+import { Session} from 'next-iron-session'
+declare module 'next' {
+  interface NextApiRequest {
+    session: Session
+  }
+}
 type User = {
   id: number
 }
@@ -17,6 +22,7 @@ type CommenProps = {
   createdAt: string | '';
   updatedAt: string | '';
 }
+
 type Props = {
   // id:string,
   // title: string;

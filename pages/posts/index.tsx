@@ -9,10 +9,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { withSession } from 'lib/withSession'
 import axios from 'axios';
 import { useRouter } from 'next/dist/client/router';
-// import pn from '/assets/images/1.png'
 import Image from 'next/image'
-import { log } from 'console';
 import { useSet } from 'hooks/useDialog';
+import bg from '../../public/cover.jpeg'
 
 type Props = {
   posts: Post[];
@@ -23,12 +22,19 @@ type Props = {
   currentUser: number | null;
 }
 const PostsIndex: NextPage<Props> = (props) => {
+  // 特殊的写法，样式也可以通过js来写
+  const customStyle = {
+    backgroundImage:`url(${bg})`,
+    layout: 'fixed',
+    paddingTop: '0px',
+    height:'500',
+  }
+
   const { posts, count, page, totalPage, currentUser } = props;
   const { pager } = usePager({ page, totalPage });
 
   const [state, setState] = useState(false)
   const { set } = useSet(state)
-
 
   const setting = useCallback(() => {
     if (state == false) {
@@ -56,7 +62,6 @@ const PostsIndex: NextPage<Props> = (props) => {
         window.alert('删除失败');
       });
   }, [id]);
-
 
   return (
     <>
@@ -87,7 +92,7 @@ const PostsIndex: NextPage<Props> = (props) => {
           </button>
         </a>
       </div>
-      <div className="posts">
+      <div className="posts" style={customStyle}>
         <header className="head">
           <Image
             className='pic'
@@ -102,9 +107,13 @@ const PostsIndex: NextPage<Props> = (props) => {
           }
         </header>
         <main className='main'>
-
+        <Image
+            src="/main.jpeg"
+            alt="Picture of the author"
+            width={'800px'}
+            height={'220px'}
+          />
         </main>
-        <span className="bottomSt"></span>
         {posts.map(post =>
           <div key={post.id} className="onePost">
             <div>
@@ -114,7 +123,6 @@ const PostsIndex: NextPage<Props> = (props) => {
                 alt="Picture of the author"
                 width={12}
                 height={16}
-
               />
               <Link key={post.id} href={`/posts/${post.id}`}>
                 <a className='title'>
@@ -138,10 +146,15 @@ const PostsIndex: NextPage<Props> = (props) => {
           {pager}
         </footer>
       </div>
+      <div className='footer'>
+        <button className='button'>关于</button>
+        <button className='button'>博客</button>
+        <button className='button'>网站</button>
+      </div>
       <style jsx>{`
         .frame {
           margin: 0;
-          padding: 14px 100px 16px 80px;
+          padding: 14px 100px 14px 80px;
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -149,9 +162,9 @@ const PostsIndex: NextPage<Props> = (props) => {
           background: radial-gradient(circle, 
             rgba(238,174,202,1) 4%, 
             rgba(153,148,233,0.6054796918767507) 78%);
-        }
-        .frame > menu{
-          font-size: 12px;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            color: rgb(49, 48, 48);
+            font-size: 24px;
         }
         .frame > .right > .pic {
           position: relative;
@@ -161,25 +174,21 @@ const PostsIndex: NextPage<Props> = (props) => {
         }
           .posts {
             height: 100vh;
-            max-width: 800px;
+            max-width: 100%;
             margin: 0 auto;
-            padding: 16px;
+            padding: 20px;
             position: relative;
-            background-color: aliceblue;
           }
           .posts > .head {
+            margin: 0px auto;
+            width: 800px;
             display: flex;
             justify-content:center;
             align-items: center;
             padding-bottom: 20px;
             border-bottom: 4px solid rgb(201, 199, 199);
-          }
-          .posts > .bottomSt{
-            position: absolute;
-            top: 42px;
-            width: 13%;
-            height: 20px;
-            border-bottom: 4px solid black;
+            background-color: aliceblue;
+            padding: 20px 14px;
           }
           .posts > .head > h3{
             margin: 0;
@@ -190,14 +199,18 @@ const PostsIndex: NextPage<Props> = (props) => {
               color: red;
           }
           .posts > .main {
-            width: 100%;
-            height: 130px;
-            border: 1px solid red;
+            padding: 0px;
+            margin: 0px auto;
+            width: 800px;
+            height: 220px;
           }
           .posts > .onePost {
-            padding: 20px 6px;
+            margin: 0px auto;
+            width: 800px;
+            padding: 11px 20px;
             border-bottom: 1px solid #ddd;
             padding-top: 20px;
+            background-color: aliceblue;
           }
           .onePost .btn{
             margin: 0;
@@ -222,8 +235,26 @@ const PostsIndex: NextPage<Props> = (props) => {
             margin-left: 10px;
           }
           .foot{
+            margin: 0px auto;
+            width: 800px;
             text-align: right;
             color: rgba(49, 48, 48,.5); 
+            background-color: aliceblue;
+          }
+          .footer{
+            position: fixed;
+            bottom: 0px;
+            width: 100%;
+            margin: 0;
+            padding:10px 0px;
+            text-align: center;
+            background-color:#fff;
+          }
+          .footer > .button {
+            background-color: inherit;
+            outline: none;
+            border: none;
+            cursor: pointer;
           }
         `}</style>
     </>

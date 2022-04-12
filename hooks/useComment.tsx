@@ -25,11 +25,11 @@ export function useComment<T>(options: useCommentOptions<T>) {
   const {
     initFormData, fields, buttons, submit,labelWidth } = options;
   // 非受控
-    
+  // 用户只需要传一个initFormData 就可以，用户不用自己去写逻辑，组件自己会计算出error，使用者只需在某一个时刻获取error就可以
   const [formData, setFormData] = useState(initFormData);
 //   initFormData = { titel: '', content: '', commentContent: '' };
   // initErrors = {username: [], password: []}
-  const [errors, setErrors] = useState(() => {
+  const [errors, setErrors] = useState(() => {  
     const e: { [k in keyof T]?: string[] } = {};
     for (let key in initFormData) {
       if (initFormData.hasOwnProperty(key)) { // 为了严谨

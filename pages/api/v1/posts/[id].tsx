@@ -7,7 +7,7 @@ const Posts: NextApiHandler = withSession(async (req, res) => {
   const connection = await getDatabaseConnection();
   if (req.method === 'PATCH') {
     const { title, content, id } = req.body
-    const post = await connection.manager.findOne<Post>('Post', id)
+    const post = await connection.manager.findOne('Post', id)
     post.title = title;
     post.content = content;
     const user = req.session.get('currentUser');

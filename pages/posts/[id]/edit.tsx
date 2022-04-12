@@ -4,7 +4,6 @@ import { getDatabaseConnection } from "lib/getDataBaseConnection";
 import { NextPage, GetServerSideProps } from "next";
 import { useRouter } from "next/dist/client/router";
 
-
 type Props = {
     id: Number;
     post: Post;
